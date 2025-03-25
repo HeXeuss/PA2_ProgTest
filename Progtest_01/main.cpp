@@ -162,6 +162,9 @@ private:
 #ifndef __PROGTEST__
 int main ()
 {
+    int a[] = {1,2,3,4,5};
+
+
     std::string acct;
     int    sumIncome, sumExpense;
     CTaxRegister b0;
@@ -235,6 +238,8 @@ int main ()
     assert ( sumIncome == 0 );
     assert ( sumExpense == 0 );
     assert ( !b1 . birth ( "Joe Hacker", "Elm Street 23", "AAj5#94" ) );
+
+
 
     return EXIT_SUCCESS;
 }

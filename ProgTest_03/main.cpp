@@ -122,15 +122,20 @@ public:
 
     void push_back(const T &value) {
         if (_size >= _capacity) {
-            _capacity = _capacity * 2 + 1;
-            T *new_data = new T[_capacity];
-            for (size_t i = 0; i < _size; i++) {
-                new_data[i] = _data[i];
-            }
-            delete[] _data;
-            _data = new_data;
+            resize();
         }
         _data[_size++] = value;
+    }
+
+    void insert(size_t index, const T &value) {
+        if (_size >= _capacity) {
+            resize();
+        }
+        for (size_t i = _size; i > index; i--) {
+            std::swap(_data[i], _data[i - 1]);
+        }
+        _data[index] = value;
+        _size++;
     }
 
     void erase(const size_t index) {
@@ -156,22 +161,16 @@ public:
         return end();
     }
 
-    void print() const {
-        for (size_t i = 0; i < _size; i++) std::cout << _data[i] << " ";
-        std::cout << std::endl;
-    }
-
-    void sort() {
-        for (size_t i = 0; i < _size - 1; i++) {
-            for (size_t j = 0; j < _size - 1 - i; j++) {
-                if (_data[j + 1] < _data[j]) {
-                    std::swap(_data[j], _data[j + 1]);
-                }
-            }
-        }
-    }
-
 private:
+    void resize() {
+        _capacity = _capacity * 2 + 1;
+        T *new_data = new T[_capacity];
+        for (size_t i = 0; i < _size; i++) {
+            new_data[i] = _data[i];
+        }
+        delete[] _data;
+        _data = new_data;
+    }
     size_t _size;
     size_t _capacity;
     T *_data;
@@ -244,12 +243,15 @@ public:
 
     bool settle(const Address& address) {
         for (size_t i = 0; i < _addresses.size(); i++) {
-            if (_addresses[i] == address) {
+            if (address < _addresses[i]) {
+                _addresses.insert(i, address);
+                return true;
+            }
+            if (address == _addresses[i]) {
                 return false;
             }
         }
         _addresses.push_back(address);
-        _addresses.sort();
         return true;
     }
 

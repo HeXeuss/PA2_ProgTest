@@ -12,14 +12,14 @@ public:
 
     explicit String(const char* str = ""){
         if (!str) str = "";
-        _len = std::strlen(str);
+        _len =  strlen(str);
         _data = new char[_len + 1];
-        std::memcpy(_data, str, _len + 1);
+        memcpy(_data, str, _len + 1);
     }
     String(const String& other){
         _len = other._len;
         _data = new char[_len + 1];
-        std::memcpy(_data,other._data, _len + 1);
+        memcpy(_data,other._data, _len + 1);
     }
     ~String(){
         delete[] _data;
@@ -33,8 +33,8 @@ public:
     String& operator+=(const String& other){
         size_t newLen = _len + other._len;
         char* newData = new char[newLen + 1];
-        std::memcpy(newData, _data, _len);
-        std::memcpy(newData + _len, other._data, other._len + 1);
+        memcpy(newData, _data, _len);
+        memcpy(newData + _len, other._data, other._len + 1);
         delete[] _data;
         _data = newData;
         _len = newLen;
@@ -47,22 +47,22 @@ public:
     }
 
     bool operator<(const String & other) const {
-        return std::strcmp(_data, other._data) < 0;
+        return strcmp(_data, other._data) < 0;
     }
     bool operator>(const String & other) const {
-        return std::strcmp(_data, other._data) > 0;
+        return strcmp(_data, other._data) > 0;
     }
     bool operator<=(const String & other) const {
-        return std::strcmp(_data, other._data) <= 0;
+        return strcmp(_data, other._data) <= 0;
     }
     bool operator>=(const String & other) const{
-        return std::strcmp(_data, other._data) >= 0;
+        return strcmp(_data, other._data) >= 0;
     }
     bool operator==(const String & other) const {
-        return std::strcmp(_data, other._data) == 0;
+        return strcmp(_data, other._data) == 0;
     }
     bool operator!=(const String & other) const{
-        return std::strcmp(_data, other._data) != 0;
+        return strcmp(_data, other._data) != 0;
     }
     char operator[](const size_t index) const {
         return _data[index];
@@ -85,95 +85,166 @@ public:
         return _len;
     }
 private:
-    char * _data;
+    char* _data;
     size_t _len;
 };
 
 template <typename T>
-class Array {
+class Set {
 public:
-    Array() : _size(0), _capacity(0), _data(nullptr) {}
-    Array(const Array &other) : _size(other._size), _capacity(other._capacity), _data(new T[other._capacity]) {
-        for (size_t i = 0; i < other._size; i++)
-            _data[i] = other._data[i];
-    }
-    ~Array() {
-        delete[] _data;
+    Set() : root(nullptr) {}
+    ~Set() {
+        destroy(root);
     }
 
-    void swap(Array &other) noexcept {
-        std::swap(_size, other._size);
-        std::swap(_capacity, other._capacity);
-        std::swap(_data, other._data);
+    Set(const Set& other): root(nullptr){
+        root = copyTree(other.root);
     }
 
-    Array &operator=(Array other) {
-        swap(other);
+    Set & operator=(Set other){
+        std::swap(root, other.root);
         return *this;
     }
 
-    T &operator[](size_t index) {
-        return _data[index];
+    void insert(const T& value) {
+        root = insert(root, value);
     }
 
-    const T &operator[](size_t index) const {
-        return _data[index];
+    T* find(const T& value) const {
+        return find(root, value);
     }
 
-    void push_back(const T &value) {
-        if (_size >= _capacity) {
-            resize();
-        }
-        _data[_size++] = value;
-    }
-
-    void insert(size_t index, const T &value) {
-        if (_size >= _capacity) {
-            resize();
-        }
-        for (size_t i = _size; i > index; i--) {
-            std::swap(_data[i], _data[i - 1]);
-        }
-        _data[index] = value;
-        _size++;
-    }
-
-    void erase(const size_t index) {
-        if (index >= _size) return;
-        for (size_t i = index; i < _size - 1; i++) {
-            _data[i] = std::move(_data[i + 1]);
-        }
-        _size--;
-    }
-
-    size_t size() const {
-        return _size;
-    }
-
-    size_t end() const {
-        return _size;
-    }
-
-    size_t find(const T &value) const {
-        for (size_t i = 0; i < _size; i++) {
-            if (_data[i] == value) return i;
-        }
-        return end();
+    void print(std::ostream& os) const {
+        print(root, os);
     }
 
 private:
-    void resize() {
-        _capacity = _capacity * 2 + 1;
-        T *new_data = new T[_capacity];
-        for (size_t i = 0; i < _size; i++) {
-            new_data[i] = _data[i];
+    struct Node {
+        T value;
+        Node* left;
+        Node* right;
+        int height;
+        int balance;
+
+        int getHeight(){
+            updateNode();
+            return height;
         }
-        delete[] _data;
-        _data = new_data;
+
+        int getBalance(){
+            updateNode();
+            return balance;
+        }
+
+        void updateNode() {
+            int leftHeight = 0;
+            int rightHeight = 0;
+
+            if (left != nullptr)  leftHeight  = left->height;
+            if (right != nullptr) rightHeight = right->height;
+
+            height = std::max(leftHeight, rightHeight) + 1;
+            balance = leftHeight - rightHeight;
+        }
+
+        explicit Node(const T& value)
+            : value(value), left(nullptr), right(nullptr), height(1), balance(0) {}
+
+    };
+
+    Node* root;
+
+    Node * copyTree(Node * node){
+        if(!node) return nullptr;
+        Node* newNode = new Node(node->value);
+
+        newNode->left = copyTree(node->left);
+        newNode->right = copyTree(node->right);
+
+        return newNode;
+
     }
-    size_t _size;
-    size_t _capacity;
-    T *_data;
+
+    void print(Node* node, std::ostream& os) const {
+        if (node) {
+            print(node->left, os);
+            os << "  " <<node->value << "\n";
+            print(node->right, os);
+        }
+    }
+
+    void destroy(Node* node) {
+        if (!node) return;
+        destroy(node->left);
+        destroy(node->right);
+        delete node;
+    }
+
+    T* find( Node* node, const T& value) const {
+        while (node) {
+            if (value < node->value) {
+                node = node->left;
+            }
+            else if (node->value < value) {
+                node = node->right;
+            }
+            else return &(node->value);
+        }
+        return nullptr;
+    }
+
+    Node* rightRotation(Node* node) {
+        Node* tmp = node->left;
+        node->left = tmp->right;
+        tmp->right = node;
+
+        node->updateNode();
+        tmp->updateNode();
+
+        return tmp;
+    }
+
+    Node* leftRotation(Node* node) {
+        Node* tmp = node->right;
+        node->right = tmp->left;
+        tmp->left = node;
+
+        node->updateNode();
+        tmp->updateNode();
+
+        return tmp;
+    }
+
+    Node* balance(Node* node) {
+        if (node->getBalance() == 2) {
+            if (node->left->getBalance() < 0) {
+                node->left = leftRotation(node->left);
+            }
+            return rightRotation(node);
+        }
+        if (node->getBalance() == -2) {
+            if (node->right->getBalance() > 0) {
+                node->right = rightRotation(node->right);
+            }
+            return leftRotation(node);
+        }
+        return node;
+    }
+
+    Node* insert(Node* node, const T& value) {
+        if (!node) return new Node(value);
+
+        if (value < node->value) {
+             node->left = insert(node->left, value);
+        }
+        else if (node->value < value) {
+             node->right = insert(node->right, value);
+        }
+        else return node;
+
+        node->updateNode();
+        return balance(node);
+    }
 };
 
 class Address {
@@ -241,25 +312,26 @@ public:
         return !(*this == other);
     }
 
-    bool settle(const Address& address) {
-        for (size_t i = 0; i < _addresses.size(); i++) {
-            if (address < _addresses[i]) {
-                _addresses.insert(i, address);
-                return true;
-            }
-            if (address == _addresses[i]) {
-                return false;
-            }
+    bool operator<(const Person& other) const {
+        return _id < other._id;
+    }
+
+    bool hasAddress(const Address& address) {
+        if (_addresses.find(address) != nullptr) {
+            return true;
         }
-        _addresses.push_back(address);
+        return false;
+    }
+
+    bool settle(const Address& address) {
+        if (hasAddress(address)) return false;
+        _addresses.insert(address);
         return true;
     }
 
     friend std::ostream& operator<<(std::ostream& os, const Person& person) {
-        os << person._id << " " << person._name << " " << person._surname << std::endl;
-        for (size_t i = 0; i < person._addresses.size(); ++i) {
-            os << "  " << person._addresses[i] << std::endl;
-        }
+        os << person._id << " " << person._name << " " << person._surname << "\n";
+        person._addresses.print(os);
         os << "  ";
         return os;
     }
@@ -268,55 +340,83 @@ private:
     String _id;
     String _name;
     String _surname;
-    Array<Address> _addresses;
+    Set<Address> _addresses;
 };
 
+
 class CRegister {
-    Array<Person> _people;
 public:
-    CRegister() {
-        _people = Array<Person>();
+    CRegister(): _data(new Set<Person>()), _refCount(new size_t(1)) {}
+
+    CRegister(const CRegister &other) : _data(other._data), _refCount(other._refCount) {
+        (*_refCount)++;
     }
 
-    CRegister(const CRegister &other) {
-        _people = other._people;
+    ~CRegister() {
+        if (--(*_refCount) == 0) {
+            delete _data;
+            delete _refCount;
+        }
     }
-
-    ~CRegister() = default;
 
     CRegister &operator=(CRegister other) {
         swap(other);
         return *this;
     }
-
     void swap(CRegister &other) noexcept {
-        std::swap(_people, other._people);
+        std::swap(_data, other._data);
+        std::swap(_refCount, other._refCount);
     }
 
-    bool add(const char id[], const char name[], const char surname[],
-             const char date[], const char street[], const char city[]) {
-        Person newPerson = Person(String(id), String(name),String(surname));
-        size_t it = _people.find(newPerson);
-        if (it != _people.end()) return false;
-        newPerson.settle(Address(String(date), String(street), String(city)));
-        _people.push_back(newPerson);
+    bool add(const char id[], const char name[], const char surname[], const char date[], const char street[], const char city[]) {
 
+        Person newPerson = Person(String(id), String(name),String(surname));
+
+        if (_data->find(newPerson) != nullptr) return false;
+        detach();
+        newPerson.settle(Address(String(date), String(street), String(city)));
+        _data->insert(newPerson);
         return true;
     }
 
     bool resettle(const char id[], const char date[], const char street[], const char city[]) {
-        size_t it_id = _people.find(Person(String(id), String(""), String("")));
-        if (it_id == _people.end()) return false;
+        Person * it_id = _data->find(Person(String(id), String(""), String("")));
+        if (it_id == nullptr) return false;
+
         Address newAddress = Address(String(date), String(street), String(city));
-        return _people[it_id].settle(newAddress);
+        if (it_id->hasAddress(newAddress)) return false;
+
+        detach();
+
+        it_id = _data->find(Person(String(id), String(""), String("")));
+        if (it_id == nullptr) return false;
+
+        return it_id->settle(newAddress);
     }
 
     bool print(std::ostream &os, const char id[]) const {
-        size_t it_id = _people.find(Person(String(id), String(""), String("")));
-        if (it_id == _people.end()) return false;
-        os << _people[it_id];
+        Person * it_id = _data->find(Person(String(id), String(""), String("")));
+        if (it_id == nullptr) return false;
+
+        os << *it_id;
         return true;
     }
+private:
+    Set<Person> * _data;
+    size_t * _refCount;
+
+    void detach() {
+        if (*_refCount == 1) return;
+        Set<Person> *newData = new Set<Person>(*_data);
+        size_t *newRefCount = new size_t(1);
+        if (--(*_refCount) == 0) {
+            delete _data;
+            delete _refCount;
+        }
+        _data = newData;
+        _refCount = newRefCount;
+    }
+
 };
 
 #ifndef __PROGTEST__

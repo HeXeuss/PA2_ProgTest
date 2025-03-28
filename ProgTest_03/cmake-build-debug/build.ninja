@@ -51,7 +51,7 @@ build cmake_object_order_depends_target_ProgTest_03: phony || .
 
 build CMakeFiles/ProgTest_03.dir/main.cpp.o: CXX_COMPILER__ProgTest_03_unscanned_Debug /Users/patrikhrasko/Documents/CVUT_B3/PA2/PA2_ProgTest/ProgTest_03/main.cpp || cmake_object_order_depends_target_ProgTest_03
   DEP_FILE = CMakeFiles/ProgTest_03.dir/main.cpp.o.d
-  FLAGS = -g -std=gnu++20 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk -fcolor-diagnostics
+  FLAGS = -g -std=gnu++20 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk -fcolor-diagnostics
   OBJECT_DIR = CMakeFiles/ProgTest_03.dir
   OBJECT_FILE_DIR = CMakeFiles/ProgTest_03.dir
   TARGET_COMPILE_PDB = CMakeFiles/ProgTest_03.dir/
@@ -66,7 +66,7 @@ build CMakeFiles/ProgTest_03.dir/main.cpp.o: CXX_COMPILER__ProgTest_03_unscanned
 # Link the executable ProgTest_03
 
 build ProgTest_03: CXX_EXECUTABLE_LINKER__ProgTest_03_Debug CMakeFiles/ProgTest_03.dir/main.cpp.o
-  FLAGS = -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX14.4.sdk
+  FLAGS = -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk
   OBJECT_DIR = CMakeFiles/ProgTest_03.dir
   POST_BUILD = :
   PRE_LINK = :

@@ -16,34 +16,27 @@
 
 class CTimeStamp
 {
-  public:
-                          CTimeStamp    ( int               year,
-                                          int               month,
-                                          int               day,
-                                          int               hour,
-                                          int               minute,
-                                          double            sec );
-    int                   compare       ( const CTimeStamp & x ) const;
-    friend std::ostream & operator <<   ( std::ostream     & os,
-                                          const CTimeStamp & x );
-  private:
+public:
+  CTimeStamp(int year, int month, int day, int hour, int minute, double sec);
+  int compare(const CTimeStamp &x) const;
+  friend std::ostream &operator<<(std::ostream &os, const CTimeStamp &x);
+
+private:
 };
+
 class CMail
 {
-  public:
-                          CMail         ( const CTimeStamp & timeStamp,
-                                          const std::string & from,
-                                          const std::string & to,
-                                          const std::optional<std::string> & subject );
-    int                   compareByTime ( const CTimeStamp & x ) const;
-    int                   compareByTime ( const CMail      & x ) const;
-    const std::string   & from          () const;
-    const std::string   & to            () const;
-    //const std::optional<std::string>  & subject       () const;
-    const CTimeStamp    & timeStamp     () const;
-    friend std::ostream & operator <<   ( std::ostream     & os,
-                                          const CMail      & x );
-  private:
+public:
+  CMail(const CTimeStamp &timeStamp, const std::string &from, const std::string &to, const std::optional<std::string> &subject);
+  int compareByTime(const CTimeStamp &x) const;
+  int compareByTime(const CMail &x) const;
+  const std::string &from() const;
+  const std::string &to() const;
+  const std::optional<std::string> &subject() const;
+  const CTimeStamp &timeStamp() const;
+  friend std::ostream &operator<<(std::ostream &os, const CMail &x);
+
+private:
 };
 // your code will be compiled in a separate namespace
 namespace MysteriousNamespace {

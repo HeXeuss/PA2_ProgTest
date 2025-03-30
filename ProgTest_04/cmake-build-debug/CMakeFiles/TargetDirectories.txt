@@ -1,0 +1,3 @@
+/Users/patrikhrasko/Documents/CVUT_B3/PA2/PA2_ProgTest/ProgTest_04/cmake-build-debug/CMakeFiles/ProgTest_04.dir
+/Users/patrikhrasko/Documents/CVUT_B3/PA2/PA2_ProgTest/ProgTest_04/cmake-build-debug/CMakeFiles/edit_cache.dir
+/Users/patrikhrasko/Documents/CVUT_B3/PA2/PA2_ProgTest/ProgTest_04/cmake-build-debug/CMakeFiles/rebuild_cache.dir

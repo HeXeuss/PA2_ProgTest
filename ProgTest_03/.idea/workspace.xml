@@ -29,25 +29,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d9e4dc98-58cd-4dd3-9a83-94f1331d7168" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/../ProgTest_04/.idea/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../ProgTest_04/.idea/ProgTest_04.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../ProgTest_04/.idea/editor.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../ProgTest_04/.idea/material_theme_project_new.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../ProgTest_04/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../ProgTest_04/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../ProgTest_04/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/CMakeLists.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/.cmake/api/v1/reply/cmakeFiles-v1-13157d41ce0268202877.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/.cmake/api/v1/reply/codemodel-v2-b572913760b3d35b97e3.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/.cmake/api/v1/reply/index-2025-03-28T20-14-13-0865.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/.cmake/api/v1/reply/target-ProgTest_03-Debug-9d181e91d8da93b335ae.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/.ninja_deps" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/.ninja_deps" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/.ninja_log" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/.ninja_log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/ProgTest_03.dir/main.cpp.o" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/ProgTest_03.dir/main.cpp.o" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/ProgTest_03" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/ProgTest_03" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/Testing/Temporary/LastTest.log" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/Testing/Temporary/LastTest.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/build.ninja" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/build.ninja" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -132,7 +114,7 @@
       <workItem from="1743286715376" duration="10000" />
       <workItem from="1743332107237" duration="605000" />
       <workItem from="1743333278860" duration="5000" />
-      <workItem from="1743333395134" duration="119000" />
+      <workItem from="1743333395134" duration="456000" />
     </task>
     <servers />
   </component>

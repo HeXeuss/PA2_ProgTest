@@ -99,120 +99,94 @@ public:
         int count = 0;
         std::string line;
         while (std::getline(in, line)) {
-            std::istringstream a(line);
-            count += parseLine(a);
+            std::istringstream lineStream(line);
+            count += parseLine(lineStream);
         }
+        std::ranges::for_each(sentMail, [](auto &a) { a.second.processed = true; });
         return count;
     }
 
     std::list<CMail> listMail(const CTimeStamp &from, const CTimeStamp &to) const {
-        std::list<CMail> result;
-        auto it = _mailMap.lower_bound(from);
-        while (it != _mailMap.end() && it->first.compare(to) <= 0) {
-            result.push_back(it->second);
-            ++it;
-        }
-        return result;
+
+        auto it_from = receivedMail.lower_bound(CMail(from, "", "", std::nullopt));
+        auto it_to = receivedMail.upper_bound(CMail(to, "", "", std::nullopt));
+
+        return {it_from,it_to};
     }
 
     std::set<std::string> activeUsers(const CTimeStamp &from, const CTimeStamp &to) const {
         std::set<std::string> result;
-        auto it = _mailMap.lower_bound(from);
-        while (it != _mailMap.end() && it->first.compare(to) <= 0) {
-            result.insert(it->second.from());
-            result.insert(it->second.to());
-            ++it;
-        }
+        auto it_from = receivedMail.lower_bound(CMail(from, "", "", std::nullopt));
+        auto it_to = receivedMail.upper_bound(CMail(to, "", "", std::nullopt));
+        for_each(it_from, it_to, [&result](const CMail &mail) {
+            result.insert(mail.to());
+            result.insert(mail.from());
+        });
+
         return result;
     }
 
 private:
-    struct EmailData{
-        std::string from;
+    struct CMailCmp {
+        bool operator()(const CMail &x, const CMail &y) const {
+            return x.compareByTime(y) < 0;
+        }
+    };
+    struct MetaData {
+        std::string sender;
         std::optional<std::string> subject;
-        CTimeStamp timeStamp;
-
-        EmailData(std::string from, std::optional<std::string> subject, CTimeStamp timeStamp):
-            from(std::move(from)), subject(std::move(subject)), timeStamp(timeStamp) {}
+        bool processed = false;
     };
+    std::unordered_map<std::string, MetaData> sentMail;
+    std::multiset<CMail, CMailCmp> receivedMail;
 
-    std::unordered_map<std::string, std::shared_ptr<EmailData>> _mailLog;
-
-    struct CTimeStampCompare {
-        bool operator()(const CTimeStamp &x, const CTimeStamp &y) const {
-            return x.compare(y) < 0;
-        }
-    };
-    std::multimap<CTimeStamp, CMail, CTimeStampCompare> _mailMap;
-
-    static std::map<std::string, int> createMonthMap() {
-        std::map<std::string, int> monthMap;
-        monthMap["Jan"] = 1;
-        monthMap["Feb"] = 2;
-        monthMap["Mar"] = 3;
-        monthMap["Apr"] = 4;
-        monthMap["May"] = 5;
-        monthMap["Jun"] = 6;
-        monthMap["Jul"] = 7;
-        monthMap["Aug"] = 8;
-        monthMap["Sep"] = 9;
-        monthMap["Oct"] = 10;
-        monthMap["Nov"] = 11;
-        monthMap["Dec"] = 12;
-        return monthMap;
-    }
-
-    static CTimeStamp parseTimeStamp(std::istream & is) {
-        std::string monthString, dayString, yearString, timeString;
-        is >> monthString >> dayString >> yearString >> timeString;
-        return {
-            std::stoi(yearString),
-            createMonthMap()[monthString],
-            std::stoi(dayString),
-            std::stoi(timeString.substr(0, 2)),
-            std::stoi(timeString.substr(3, 2)),
-            std::stod(timeString.substr(6))
-        };
-    }
-
-    int insertMail(const CTimeStamp &timeStamp, const std::string &id, const std::string &type, const std::string &message) {
-        if (type == "from="){
-            if (!_mailLog.contains(id)) {
-                _mailLog[id] = std::make_shared<EmailData>(EmailData(message, std::nullopt, timeStamp));
+    int insertLog(const std::string & rest, const CTimeStamp &timeStamp, const std::string &id) {
+        if (rest.rfind("from=", 0) == 0) {
+            if (!sentMail.contains(id)) {
+                sentMail[id] = MetaData(rest.substr(5), std::nullopt);
             }
-            return 0;
         }
-        if (type == "subject=") {
-            if (_mailLog.contains(id)) {
-                _mailLog[id]->subject = message;
+        if (rest.rfind("subject=", 0) == 0) {
+            if (sentMail.contains(id) && sentMail[id].processed == false) {
+                sentMail[id].subject = rest.substr(8);
             }
-            return 0;
         }
-        if (type == "to=") {
-            if (_mailLog.contains(id)) {
-                CMail mail(timeStamp, _mailLog[id]->from, message, _mailLog[id]->subject);
-                _mailMap.emplace(timeStamp, mail);
+        if (rest.rfind("to=", 0) == 0) {
+            if (sentMail.contains(id) && sentMail[id].processed == false) {
+                receivedMail.insert(CMail(timeStamp, sentMail[id].sender, rest.substr(3), sentMail[id].subject));
                 return 1;
             }
+
         }
         return 0;
     }
 
-    int parseLine(std::istream& lineStream) {
-        std::string relayString, idString, mailString;
+    int parseLine(std::istream & lineStream) {
+        std::string relay, id, rest, month;
+        int year, day, hour, minute;
+        char discard;
+        double sec;
 
-        CTimeStamp timeStamp = parseTimeStamp(lineStream);
+        if (!(lineStream >> month >> day >> year >> hour >> discard >> minute >> discard >> sec >> relay >> id))
+            return false;
 
-        lineStream >> relayString >> idString;
-        idString.pop_back();
+        lineStream >> std::ws;
+        std::getline(lineStream, rest);
 
-        std::getline(lineStream, mailString);
-        auto it = mailString.find('=');
-        std::string type = mailString.substr(1, it);
-        std::string message = mailString.substr(it + 1);
+        id.pop_back();
 
-        return insertMail(timeStamp, idString, type, message);
+        if(!monthList.contains(month)) return false;
+        CTimeStamp timeStamp(year,monthList[month] , day, hour, minute, sec);
+
+
+        return insertLog(rest, timeStamp, id);
     }
+
+    std::map<std::string, int> monthList = {
+        {"Jan", 1}, {"Feb", 2}, {"Mar", 3}, {"Apr", 4},
+        {"May", 5}, {"Jun", 6}, {"Jul", 7}, {"Aug", 8},
+        {"Sep", 9}, {"Oct", 10}, {"Nov", 11}, {"Dec", 12}
+    };
 };
 //----------------------------------------------------------------------------------------
 #ifndef __PROGTEST__

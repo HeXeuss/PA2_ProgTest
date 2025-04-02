@@ -116,8 +116,8 @@ public:
 
     std::set<std::string> activeUsers(const CTimeStamp &from, const CTimeStamp &to) const {
         std::set<std::string> result;
-        auto it_from = receivedMail.lower_bound(CMail(from, "", "", std::nullopt));
-        auto it_to = receivedMail.upper_bound(CMail(to, "", "", std::nullopt));
+        const auto it_from = receivedMail.lower_bound(CMail(from, "", "", std::nullopt));
+        const auto it_to = receivedMail.upper_bound(CMail(to, "", "", std::nullopt));
         for_each(it_from, it_to, [&result](const CMail &mail) {
             result.insert(mail.to());
             result.insert(mail.from());

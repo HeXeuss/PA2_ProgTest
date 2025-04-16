@@ -55,7 +55,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "/Users/patrikhrasko/Desktop/ProgTest_05/cmake-build-debug"
+			"value" : "/Users/patrikhrasko/Documents/CVUT_B3/PA2/PA2_ProgTest/ProgTest_05/cmake-build-debug"
 		},
 		{
 			"name" : "CMAKE_CACHE_MAJOR_VERSION",
@@ -479,7 +479,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "/Users/patrikhrasko/Desktop/ProgTest_05/cmake-build-debug/CMakeFiles/pkgRedirects"
+			"value" : "/Users/patrikhrasko/Documents/CVUT_B3/PA2/PA2_ProgTest/ProgTest_05/cmake-build-debug/CMakeFiles/pkgRedirects"
 		},
 		{
 			"name" : "CMAKE_GENERATOR",
@@ -539,7 +539,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "/Users/patrikhrasko/Desktop/ProgTest_05"
+			"value" : "/Users/patrikhrasko/Documents/CVUT_B3/PA2/PA2_ProgTest/ProgTest_05"
 		},
 		{
 			"name" : "CMAKE_INSTALL_NAME_TOOL",
@@ -1127,7 +1127,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "/Users/patrikhrasko/Desktop/ProgTest_05/cmake-build-debug"
+			"value" : "/Users/patrikhrasko/Documents/CVUT_B3/PA2/PA2_ProgTest/ProgTest_05/cmake-build-debug"
 		},
 		{
 			"name" : "ProgTest_05_IS_TOP_LEVEL",
@@ -1151,7 +1151,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "/Users/patrikhrasko/Desktop/ProgTest_05"
+			"value" : "/Users/patrikhrasko/Documents/CVUT_B3/PA2/PA2_ProgTest/ProgTest_05"
 		}
 	],
 	"kind" : "cache",

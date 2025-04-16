@@ -1,4 +1,4 @@
-# Install script for directory: /Users/patrikhrasko/Desktop/ProgTest_05
+# Install script for directory: /Users/patrikhrasko/Documents/CVUT_B3/PA2/PA2_ProgTest/ProgTest_05
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -52,6 +52,6 @@ endif()
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-  file(WRITE "/Users/patrikhrasko/Desktop/ProgTest_05/cmake-build-debug/${CMAKE_INSTALL_MANIFEST}"
+  file(WRITE "/Users/patrikhrasko/Documents/CVUT_B3/PA2/PA2_ProgTest/ProgTest_05/cmake-build-debug/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")
 endif()

@@ -2,7 +2,7 @@
 	"artifacts" : 
 	[
 		{
-			"path" : "Test"
+			"path" : "ProgTest_05"
 		}
 	],
 	"backtrace" : 1,
@@ -53,7 +53,7 @@
 			]
 		}
 	],
-	"id" : "Test::@6890427a1f51a3e7e1df",
+	"id" : "ProgTest_05::@6890427a1f51a3e7e1df",
 	"link" : 
 	{
 		"commandFragments" : 
@@ -69,8 +69,8 @@
 		],
 		"language" : "CXX"
 	},
-	"name" : "Test",
-	"nameOnDisk" : "Test",
+	"name" : "ProgTest_05",
+	"nameOnDisk" : "ProgTest_05",
 	"paths" : 
 	{
 		"build" : ".",
